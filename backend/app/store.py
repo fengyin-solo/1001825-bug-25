@@ -6,13 +6,17 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.seed import SEED_ROWS
+from app.seed import SEED_HISTORY, SEED_ROWS
 
 
 class Store:
     def __init__(self) -> None:
         self._tables: dict[str, list[dict[str, Any]]] = {
             name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
+        }
+        # 定级与流转历史单独存放，不进 _tables，避免被概览统计当成业务模块
+        self._history: dict[str, list[dict[str, Any]]] = {
+            name: [dict(row) for row in rows] for name, rows in SEED_HISTORY.items()
         }
 
     def module_names(self) -> list[str]:
@@ -26,6 +30,13 @@ class Store:
             if int(row.get("id", 0)) == entry_id:
                 return row
         return None
+
+    def history(self, module: str, entry_id: int) -> list[dict[str, Any]]:
+        """单条记录的完整历史链：换账号、换入口读到的都是同一份。"""
+        return [dict(row) for row in self._history.get(module, []) if int(row.get("entry_id", 0)) == entry_id]
+
+    def append_history(self, module: str, record: dict[str, Any]) -> None:
+        self._history.setdefault(module, []).append(record)
 
     def overview(self) -> dict[str, object]:
         modules: list[dict[str, object]] = []
