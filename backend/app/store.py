@@ -4,6 +4,7 @@
 """
 from __future__ import annotations
 
+from copy import deepcopy
 from typing import Any
 
 from app.seed import SEED_ROWS
@@ -11,8 +12,9 @@ from app.seed import SEED_ROWS
 
 class Store:
     def __init__(self) -> None:
+        # 深拷贝：缺陷定级历史是嵌套结构，浅拷贝会让重启后重新播种的多个 Store 视图共享同一份列表
         self._tables: dict[str, list[dict[str, Any]]] = {
-            name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
+            name: deepcopy(rows) for name, rows in SEED_ROWS.items()
         }
 
     def module_names(self) -> list[str]:
@@ -31,11 +33,18 @@ class Store:
         modules: list[dict[str, object]] = []
         for name in self.module_names():
             rows = self.rows(name)
+            if name == "defect":
+                # 异常量与安全台账共用同一口径：严重、重大缺陷计入；不能只看提交时留下的旧标记
+                abnormal = sum(1 for row in rows if str(row.get("严重等级") or "") in {"严重", "重大"})
+                pending = sum(1 for row in rows if row.get("status") != "已闭环")
+            else:
+                abnormal = sum(1 for row in rows if row.get("abnormal"))
+                pending = sum(1 for row in rows if row.get("pending"))
             modules.append({
                 "name": name,
                 "created": len(rows),
-                "pending": sum(1 for row in rows if row.get("pending")),
-                "abnormal": sum(1 for row in rows if row.get("abnormal")),
+                "pending": pending,
+                "abnormal": abnormal,
             })
         cards = [
             {"label": "业务模块", "value": len(modules)},

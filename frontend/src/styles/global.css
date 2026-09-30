@@ -33,3 +33,27 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.account-switch select { font-size: 13px; padding: 2px 4px; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+.shift-label { margin-left: 10px; }
+.ok-text { color: #067647; }
+.locked-text { color: var(--muted); font-size: 12px; }
+.level-重大 { color: #b42318; font-weight: 600; }
+.level-严重 { color: #c2410c; font-weight: 600; }
+.level-一般 { color: #b45309; }
+.level-轻微 { color: #067647; }
+.modal-mask { position: fixed; inset: 0; background: rgba(16, 24, 40, .45); display: flex; align-items: center; justify-content: center; z-index: 20; }
+.modal { background: #fff; border-radius: 10px; width: 480px; max-width: calc(100vw - 32px); padding: 18px 20px; box-shadow: 0 12px 32px rgba(16, 24, 40, .2); }
+.modal h3 { margin: 0 0 12px; font-size: 16px; }
+.modal-body { display: flex; flex-direction: column; gap: 10px; max-height: 60vh; overflow: auto; }
+.form-row { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.form-row > span { color: var(--muted); font-size: 12px; }
+.form-row input, .form-row select, .form-row textarea { border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; font: inherit; }
+.form-row textarea { min-height: 64px; resize: vertical; }
+.required-mark { color: #b42318; margin-left: 2px; }
+.modal-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+.history-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.history-table th, .history-table td { border: 1px solid var(--border); padding: 5px 7px; text-align: left; vertical-align: top; }
+.ledger-panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin: 14px 0; }
+.ledger-panel h3 { margin: 0 0 8px; font-size: 14px; }
+.ledger-grid { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; margin-bottom: 10px; }
+.ledger-grid strong { font-size: 16px; margin-left: 6px; }

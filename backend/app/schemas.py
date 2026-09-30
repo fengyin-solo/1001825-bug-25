@@ -18,6 +18,8 @@ class PageResult(BaseModel, Generic[T]):
 class ActionResult(BaseModel):
     ok: bool
     message: str
+    # 被挡回时给出具体卡在哪一项，例如「归属班组」「状态顺序」「严重等级」
+    blocked: str | None = None
     entry: dict[str, Any] | None = None
 
 

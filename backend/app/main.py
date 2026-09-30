@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.routers import ROUTERS
+from app.services.defect import DefectService
 from app.store import store
 
 app = FastAPI(title="城市地下管网巡检养护平台", version="1.0.0")
@@ -34,5 +35,10 @@ def health() -> dict[str, object]:
 
 @app.get("/api/overview")
 def overview() -> dict[str, object]:
-    """运营概览：把各业务模块的待处理量汇总成看板卡片。"""
-    return store.overview()
+    """运营概览：把各业务模块的待处理量汇总成看板卡片。
+
+    缺陷安全台账（含闭环整改结论）一并下发到首页，口径与缺陷登记列表完全一致。
+    """
+    payload = store.overview()
+    payload["defect_ledger"] = DefectService().ledger_summary()
+    return payload
